@@ -1,25 +1,22 @@
 import json
 import os
 from flask import Flask, jsonify, request, render_template
-# from flask_wtf.csrf import CSRFProtect
-# from flask_pymongo import PyMongo
-# from pymongo import MongoClient
-
 
 app = Flask(__name__)
-# app.config.update(
-#     DEBUG=True,
-#     SECRET_KEY="secret_sauce"
-# )
-# csrf = CSRFProtect()
-# csrf.init_app(app)
-
-# Configure MongoDB connection
-# app.config['MONGO_URI'] = 'mongodb://localhost:27017/bm25'
-# mongo = PyMongo(app)
-
-# client = MongoClient('mongodb://localhost:27017/bm25')
 data_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'index_0.json')
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+
+def get_session():  # pragma: no cover
+    Session = sessionmaker()
+
+    # note sqlalchemy is modular so same logic for other DB types
+    engine = create_engine("sqlite:///applications.db", echo=True)
+    Session.configure(bind=engine)
+    session = Session()
+    return session
 
 
 
