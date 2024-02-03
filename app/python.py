@@ -2,9 +2,10 @@ import requests
 
 
 def main():
-    url = "http://localhost:5000/test"
-    data = {"probando": "uno, dos, tres"}
+    url = "http://127.0.0.1:5000/test"
+    data = {"data": "uno, dos, tres"}
     response = requests.post(url, data=data)
+    print(response.text)
     return response
 
 if __name__ == "__main__":

@@ -33,12 +33,12 @@ def make_request():
         if request.method == 'POST':
             print(request)
             data = request.form.get('data')
-            return f"received data: {'data'}"
+            return f"received data: {data}\n"
             # return render_template('display_data.html', data=data)
         else:
             with open(data_path, 'r') as json_file:
                 data = json_file.read()
-                return jsonify({"data": data})
+                return data
     except FileNotFoundError:
         return jsonify({"error": "JSON file not found"}), 404
     except Exception as e:
