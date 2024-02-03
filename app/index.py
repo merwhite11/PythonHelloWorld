@@ -7,7 +7,7 @@ data_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'index_0.json'
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from db.tables import Names
 
 def get_session():
     Session = sessionmaker()
@@ -18,11 +18,34 @@ def get_session():
     session = Session()
     return session
 
-
+session = get_session()
 
 @app.route('/')
 def hello():
     return 'Hello, this is your Flask server!'
+
+# todo refactor to a new file
+def get_name_api():
+    """ returns all names in the db"""
+    all_names = session.query(Names)
+    return [{"id": new_name.id, "name": new_name.name} for new_name in all_names]
+
+def post_name_api(name:str):
+    """Saves a name in the db"""
+    new_name = Names(name=name)
+    session.add(new_name)
+    session.commit()
+    return {"id": new_name.id, "name": new_name.name}
+    # return jsonify(new_name)
+
+
+
+@app.route('/names', methods=['GET', 'POST'])
+def names_api():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        return post_name_api(name)
+    return get_name_api()
 
 @app.route('/test', methods=['GET', 'POST'])
 def make_request():
