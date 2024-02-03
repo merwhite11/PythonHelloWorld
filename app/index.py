@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-def get_session():  # pragma: no cover
+def get_session():
     Session = sessionmaker()
 
     # note sqlalchemy is modular so same logic for other DB types
