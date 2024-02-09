@@ -1,10 +1,12 @@
 import json
 import os
 from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS
 
 app = Flask(__name__)
 data_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'index_0.json')
-
+# Enable CORS for routes matching /api/*
+CORS(app, resources={r"/*": {"origins": "*"}})
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db.tables import Names
@@ -40,11 +42,26 @@ def post_name_api(name:str):
 
 
 
+# @app.route('/pynames', methods=['GET', 'POST'])
+# def names_api():
+#     if request.method == 'POST':
+#         print(request.form)
+#         name = request.form.get('name')
+#         return post_name_api(name)
+#     return get_name_api()
+
 @app.route('/names', methods=['GET', 'POST'])
 def names_api():
     if request.method == 'POST':
-        name = request.form.get('name')
-        return post_name_api(name)
+        data = request.json
+        name = data.get('name')
+        if name is not None:
+            # Here, you can pass the name variable to your model
+            # For example, you can return it in the response for testing purposes
+            return post_name_api(name)
+            print(jsonify({'name': name}), 200)
+        else:
+            return jsonify({'error': 'Name not found in request'}), 400
     return get_name_api()
 
 @app.route('/test', methods=['GET', 'POST'])

@@ -1,9 +1,9 @@
 import requests
 
 
-def main():
-    url = "http://127.0.0.1:5000/names"
-    data = {"name": "sam"}
+def post_name():
+    url = "http://127.0.0.1:5000/pynames"
+    data = {"name": "walter"}
     response = requests.post(url, data=data)
     print(response.text)
     return response
@@ -15,5 +15,5 @@ def get_names():
     return response
 
 if __name__ == "__main__":
-    result = get_names()
+    result = post_name()
     print(result)
